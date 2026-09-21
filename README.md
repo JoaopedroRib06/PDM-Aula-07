@@ -1,101 +1,66 @@
-# App Catálogo Mobile — Programação para Dispositivos Móveis I
+# App de Checkout e Navegação no Flutter — Aula 07 (PDM I)
 
-Aplicativo desenvolvido em **Flutter** e **Dart**, com foco em **Orientação a Objetos**, **Material Design 3**, arquitetura limpa, design **minimalista e funcional**, e boas práticas de versionamento com **Git/GitHub**.
-
----
-
-## 📱 Visão Geral da Solução
-
-O projeto implementa a especificação completa da atividade prática **"Do JSON ao App com Versionamento"** (Aulas 1 a 4):
-1. **Modelagem Dart OO Robusta**: Estrutura fortemente tipada, imutável e com Null Safety para o modelo `Produto`.
-2. **Desserialização Segura (`fromJson`)**: Conversão segura de tipos numéricos (`num` -> `double` e `int`) a partir de dados JSON.
-3. **Regra de Negócio Encapsulada**: Getter `temEstoqueCritico` que alerta automaticamente quando o estoque for menor que 5 unidades.
-4. **Interface Material 3 Ergonômica e Minimalista**:
-   - Tema baseado em `ColorScheme.fromSeed(seedColor: Colors.indigo)` e `useMaterial3: true`.
-   - Grid padronizado de 8dp (`padding: EdgeInsets.all(16.0)`).
-   - Card ergonômico com tipografia limpa, hierarquia visual moderna e tags em widgets `Chip`.
-   - **Feedback Visual Dinâmico**: Destaque automático para estoque crítico em tom vermelho suave (`Colors.red.shade50`) com ícone de advertência (`Icons.warning_amber_rounded`).
-   - **Recursos Funcionais**:
-     - Botão de recarga na AppBar para restaurar o JSON original a qualquer instante.
-     - Botão no AppBar para inspeção direta do código JSON de origem.
-     - `FloatingActionButton` funcional para simular saídas de estoque (-1) e testar o feedback dinâmico.
-     - Ajuste interativo rápido de estoque diretamente no painel.
+Projeto prático desenvolvido para a disciplina de **Programação para Dispositivos Móveis I** (Prof. Diego Menegassi) — Semestre 2026/2.
 
 ---
 
-## 🗂️ Estrutura do Projeto
+## 🎯 Objetivos de Aprendizagem
 
-```text
-lib/
-├── models/
-│   └── produto.dart       # Classe Produto com tipagem estrita, getters e fromJson
-└── main.dart              # Tela do catálogo em Material 3 minimalista e funcional
-
-test/
-├── produto_test.dart      # Testes unitários para regras de negócio e desserialização
-└── widget_test.dart       # Teste de integração de widgets e feedback visual dinâmico
-
-screenshots/               # Capturas de tela do app em funcionamento
-```
+- **StatelessWidget vs StatefulWidget**: diferenciação na prática do ciclo de vida e renderização de componentes estáticos e reativos.
+- **Gerenciamento de Estado Local (`setState`)**: manipulação reativa da interface a partir da interação do usuário.
+- **Controle de Rotas (`Navigator`)**: empilhamento e desempilhamento de telas utilizando `Navigator.push` e `Navigator.pop`.
+- **Comunicação entre Telas**: transferência de parâmetros/argumentos via construtor e retorno assíncrono de valores.
+- **Versionamento Semântico no GitHub**: boas práticas de commits atômicos e organizados.
 
 ---
 
-## 📊 Estrutura de Dados (JSON Simulado)
+## 🏗️ Estrutura e Arquitetura do App
 
-```json
-{
-  "nome_produto": "Smartphone Galaxy S24",
-  "categoria": "Mobile",
-  "preco": 4599.90,
-  "quantidade_estoque": 12,
-  "disponivel": true,
-  "tags": ["android", "5g", "snapdragon"]
-}
-```
+O projeto adota uma arquitetura limpa de arquivo duplo:
+
+| Componente | Tipo de Widget | Papel na Aplicação | Comunicação |
+| :--- | :--- | :--- | :--- |
+| `TelaContador` (`lib/main.dart`) | `StatefulWidget` | Tela principal interativa de seleção de quantidade com controle reativo. | Chama `Navigator.push` enviando dados pelo construtor e recebe confirmação. |
+| `TelaResumo` (`lib/tela_resumo.dart`) | `StatelessWidget` | Exibe a confirmação do pedido, detalhes do item e valor total calculado. | Chama `Navigator.pop(context)` para alterar ou `Navigator.pop(context, true)` para confirmar. |
 
 ---
 
-## 🚀 Como Executar o Projeto
+## 🏆 Desafios Práticos de Laboratório Implementados
 
-### Pré-requisitos
-- Flutter SDK 3.x instalado e configurado no PATH
-- Dart SDK 3.x
+Todos os 3 níveis de desafio foram plenamente desenvolvidos com design minimalista em **Material Design 3**:
 
-### Passo a passo
-1. Clone ou acesse a pasta do projeto:
-   ```bash
-   cd PDM-flutter
-   ```
+- ✅ **Nível 1 (Básico)**: Botão `Zerar Contador` (`OutlinedButton`) na `TelaContador` que redefine `_quantidade = 1` invocando `setState()`.
+- ✅ **Nível 2 (Intermediário)**: Preço unitário configurado (`R$ 150,00`) com cálculo reativo do valor total (`_quantidade * precoUnitario`), exibido tanto na tela principal quanto na tela de resumo.
+- ✅ **Nível 3 (Avançado)**: Retorno de confirmação via `Navigator.pop(context, true)` na `TelaResumo`, disparando um `SnackBar` na `TelaContador` com a mensagem `"Pedido Confirmado com Sucesso!"`.
 
-2. Instale as dependências:
+---
+
+## 🚀 Como Executar
+
+1. Instale as dependências:
    ```bash
    flutter pub get
    ```
 
-3. Execute os testes unitários e de widget:
+2. Execute os testes unitários e de widget:
    ```bash
    flutter test
    ```
 
-4. Execute o aplicativo:
-   - **No navegador (Chrome/Edge)**:
-     ```bash
-     flutter run -d chrome
-     ```
-   - **No Windows Desktop**:
-     ```bash
-     flutter run -d windows
-     ```
-   - **No Smartphone/Emulador Android**:
-     ```bash
-     flutter run -d <device-id>
-     ```
+3. Inicie o app no navegador Chrome:
+   ```bash
+   flutter run -d chrome
+   ```
+
+4. Ou no Windows Desktop:
+   ```bash
+   flutter run -d windows
+   ```
 
 ---
 
 ## 🌿 Histórico de Commits Semânticos
 
-O versionamento segue estritamente o roteiro pedagógico da disciplina:
-1. `feat: cria modelo de dados Produto com tipagem e getters`
-2. `feat: implementa interface de catalogo com Scaffold e Cards Material 3`
-3. `chore: adiciona configurações do projeto, testes e capturas de tela`
+1. `feat: cria TelaResumo stateless para exibicao do pedido`
+2. `feat: implementa contador com setState e integracao com Navigator`
+3. `chore: atualiza testes automatizados e documentacao da aula 07`
